@@ -9,9 +9,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IProductService, ProductService>();
 builder.Services.AddSingleton<ICartService, CartService>();
 
-//builder.Services.AddScoped<IProductService, ProductService>();
-//builder.Services.AddScoped<ICartService, CartService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
