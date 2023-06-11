@@ -1,7 +1,16 @@
+using Registrator.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Register your services here
+builder.Services.AddSingleton<IProductService, ProductService>();
+builder.Services.AddSingleton<ICartService, CartService>();
+
+//builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<ICartService, CartService>();
 
 var app = builder.Build();
 

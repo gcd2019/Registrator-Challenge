@@ -1,63 +1,69 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Registrator.Models;
+using Registrator.Services;
 
 namespace Registrator.Controllers
 {
     public class CartController : Controller
     {
-        private static List<CartItem> _cart = new List<CartItem>();
+        private readonly IProductService _productService;
+        private readonly ICartService _cartService;
 
-        public ActionResult Index()
+        public CartController(IProductService productService, ICartService cartService)
         {
-            // Fetch the list of products
-            var products = ProductsController.GetAllProducts();
+            _productService = productService;
+            _cartService = cartService;
+        }
 
-            // Assign the products to ViewBag.Products
+        public IActionResult Index()
+        {
+            var products = _productService.GetAllProducts();
+
             ViewBag.Products = products;
 
-            return View(_cart);
+            return View(_cartService.GetCartItems());
         }
 
         [HttpPost]
-        public ActionResult AddToCart(int productId, int quantity)
+        public IActionResult AddToCart(int productId, int quantity)
         {
-            var product = ProductsController.GetProductById(productId);
-            var cartItem = _cart.Find(ci => ci.Product.Id == productId);
+            var product = _productService.GetProductById(productId);
 
-            if (cartItem == null)
+            if (product == null)
             {
-                _cart.Add(new CartItem { Product = product, Quantity = quantity });
+                return NotFound("Product not found");
             }
-            else
-            {
-                cartItem.Quantity += quantity;
-            }
+
+            _cartService.AddToCart(product, quantity);
 
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult UpdateQuantity(int productId, int quantity)
+        public IActionResult UpdateQuantity(int productId, int quantity)
         {
-            var cartItem = _cart.Find(ci => ci.Product.Id == productId);
+            var product = _productService.GetProductById(productId);
 
-            if (cartItem != null && quantity >= 0)
+            if (product == null)
             {
-                cartItem.Quantity = quantity;
+                return NotFound("Product not found");
             }
+
+            _cartService.UpdateQuantity(product, quantity);
 
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult RemoveFromCart(int productId)
+        public IActionResult RemoveFromCart(int productId)
         {
-            var cartItem = _cart.Find(ci => ci.Product.Id == productId);
+            var product = _productService.GetProductById(productId);
 
-            if (cartItem != null)
+            if (product == null)
             {
-                _cart.Remove(cartItem);
+                return NotFound("Product not found");
             }
+
+            _cartService.RemoveFromCart(product);
 
             return RedirectToAction("Index");
         }
