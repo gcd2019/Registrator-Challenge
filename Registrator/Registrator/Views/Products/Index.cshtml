@@ -1,0 +1,16 @@
+﻿@model List<Product>
+
+@foreach (var product in Model)
+{
+    <div>
+        <h2>@product.Name</h2>
+        <p>@product.Description</p>
+        <p>@product.Price</p>
+
+        <form action="/Cart/AddToCart" method="post">
+            <input type="hidden" name="productId" value="@product.Id" />
+            <input type="number" name="quantity" value="1" min="1" />
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+}
