@@ -26,14 +26,15 @@ namespace Registrator.Controllers
         [HttpPost]
         public IActionResult AddToCart(int productId, int quantity)
         {
-            var product = _productService.GetProductById(productId);
-
-            if (product == null)
+            try
             {
-                return NotFound("Product not found");
+                var product = _productService.GetProductById(productId);
+                _cartService.AddToCart(product, quantity);
             }
-
-            _cartService.AddToCart(product, quantity);
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
 
             return RedirectToAction("Index");
         }
@@ -41,14 +42,15 @@ namespace Registrator.Controllers
         [HttpPost]
         public IActionResult UpdateQuantity(int productId, int quantity)
         {
-            var product = _productService.GetProductById(productId);
-
-            if (product == null)
+            try
             {
-                return NotFound("Product not found");
+                var product = _productService.GetProductById(productId);
+                _cartService.UpdateQuantity(product, quantity);
             }
-
-            _cartService.UpdateQuantity(product, quantity);
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
 
             return RedirectToAction("Index");
         }
@@ -56,14 +58,15 @@ namespace Registrator.Controllers
         [HttpPost]
         public IActionResult RemoveFromCart(int productId)
         {
-            var product = _productService.GetProductById(productId);
-
-            if (product == null)
+            try
             {
-                return NotFound("Product not found");
+                var product = _productService.GetProductById(productId);
+                _cartService.RemoveFromCart(product);
             }
-
-            _cartService.RemoveFromCart(product);
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
 
             return RedirectToAction("Index");
         }
