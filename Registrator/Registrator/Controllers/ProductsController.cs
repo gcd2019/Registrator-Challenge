@@ -15,5 +15,10 @@ namespace Registrator.Controllers
         {
             return View(_products);
         }
+
+        public static Product GetProductById(int productId)
+        {
+            return _products.Find(p => p.Id == productId);
+        }
     }
 }
