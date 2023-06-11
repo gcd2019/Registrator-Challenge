@@ -1,0 +1,22 @@
+﻿@model List<CartItem>
+
+@foreach (var cartItem in Model)
+{
+    <div>
+        <h2>@cartItem.Product.Name</h2>
+        <p>Price per item: @cartItem.Product.Price</p>
+        <p>Quantity: @cartItem.Quantity</p>
+        <p>Total price: @cartItem.TotalPrice</p>
+
+        <form action="/Cart/UpdateQuantity" method="post">
+            <input type="hidden" name="productId" value="@cartItem.Product.Id" />
+            <input type="number" name="quantity" value="@cartItem.Quantity" min="0" />
+            <button type="submit">Update Quantity</button>
+        </form>
+
+        <form action="/Cart/RemoveFromCart" method="post">
+            <input type="hidden" name="productId" value="@cartItem.Product.Id" />
+            <button type="submit">Remove from Cart</button>
+        </form>
+    </div>
+}

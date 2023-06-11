@@ -8,7 +8,8 @@ namespace Registrator.Controllers
         // This should be replaced by an actual database in a real-world app
         private static List<Product> _products = new List<Product>
         {
-            new Product { Id = 1, Name = "Product 1", Description = "Description 1", Price = 10},
+            new Product { Id = 1, Name = "Product 1", Description = "Description 1", Price = 5},
+            new Product { Id = 2, Name = "Product 2", Description = "Description 2", Price = 10},
         };
 
         public ActionResult Index()
