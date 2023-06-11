@@ -9,6 +9,12 @@ namespace Registrator.Controllers
 
         public ActionResult Index()
         {
+            // Fetch the list of products
+            var products = ProductsController.GetAllProducts();
+
+            // Assign the products to ViewBag.Products
+            ViewBag.Products = products;
+
             return View(_cart);
         }
 

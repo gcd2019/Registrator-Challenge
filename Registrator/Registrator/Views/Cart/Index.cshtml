@@ -2,33 +2,67 @@
 
 <div class="container">
     <div class="row">
-        @foreach (var cartItem in Model)
-        {
-            <div class="col-md-12">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">@cartItem.Product.Name</h5>
-                        <p>Price per item: <span class="text-primary">€@cartItem.Product.Price</span></p>
-                        <p>Quantity: <span class="text-primary">@cartItem.Quantity</span></p>
-                        <p>Total price: <span class="text-primary">€@cartItem.TotalPrice</span></p>
-
-                        <form action="/Cart/UpdateQuantity" method="post" class="mb-2">
-                            <input type="hidden" name="productId" value="@cartItem.Product.Id" />
-                            <div class="input-group mb-3">
-                                <input type="number" name="quantity" value="@cartItem.Quantity" min="0" class="form-control" />
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-primary">Update Quantity</button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <form action="/Cart/RemoveFromCart" method="post">
-                            <input type="hidden" name="productId" value="@cartItem.Product.Id" />
-                            <button type="submit" class="btn btn-danger">Remove from Cart</button>
-                        </form>
+        <div class="col-md-12">
+            <form action="/Cart/AddToCart" method="post" class="mb-4">
+                <div class="input-group">
+                    <select name="productId" class="form-control">
+                        @foreach (var product in ViewBag.Products)
+                        {
+                            <option value="@product.Id">@product.Name</option>
+                        }
+                    </select>
+                    <input type="number" name="quantity" value="1" min="1" class="form-control" />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
                     </div>
                 </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Single Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total Price</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cartItem in Model)
+                    {
+                        <tr>
+                            <td>@cartItem.Product.Name</td>
+                            <td>€@cartItem.Product.Price</td>
+                            <td>
+                                <form action="/Cart/UpdateQuantity" method="post" class="mb-2">
+                                    <input type="hidden" name="productId" value="@cartItem.Product.Id" />
+                                    <div class="input-group">
+                                        <input type="number" name="quantity" value="@cartItem.Quantity" min="0" class="form-control" />
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </td>
+                            <td>€@cartItem.TotalPrice</td>
+                            <td>
+                                <form action="/Cart/RemoveFromCart" method="post">
+                                    <input type="hidden" name="productId" value="@cartItem.Product.Id" />
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <h3>Total: €@Model.Sum(item => item.TotalPrice)</h3>
             </div>
-        }
+        </div>
     </div>
 </div>

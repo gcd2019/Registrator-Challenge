@@ -22,5 +22,10 @@ namespace Registrator.Controllers
         {
             return _products.Find(p => p.Id == productId);
         }
+
+        public static List<Product> GetAllProducts()
+        {
+            return _products;
+        }
     }
 }
